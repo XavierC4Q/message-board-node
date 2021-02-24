@@ -1,10 +1,10 @@
 import { Resolver, Query } from "type-graphql";
-import { User } from "../schema/User";
+import { User } from '../models/User';
 
 @Resolver((of) => User)
 export default class UserResolver {
-  @Query((returns) => [String])
-  getUsers() {
-    return ["Hello", "World"];
+  @Query((returns) => [User])
+  async getAllUsers() {
+    return await User.find();
   }
 }
