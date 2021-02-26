@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, InputType } from "type-graphql";
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 import { Length } from "class-validator";
 import { UserRole } from "../types/enums";
 
@@ -7,11 +7,11 @@ import { UserRole } from "../types/enums";
 @ObjectType()
 export class User extends BaseEntity {
   @Field((type) => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Field()
-  @Column("varchar")
+  @Column("varchar", { unique: true })
   email: string;
 
   @Field()
@@ -27,11 +27,11 @@ export class User extends BaseEntity {
   role: UserRole;
 
   @Field()
-  @Column("varchar")
+  @Column("varchar", { unique: true })
   displayName: string;
 
   @Field()
-  @Column("varchar")
+  @CreateDateColumn()
   joined: Date;
 }
 
@@ -44,9 +44,18 @@ export class UserInput implements Partial<User> {
   password: string;
 
   @Field((type) => UserRole)
-  role: UserRole;
+  role?: UserRole;
 
   @Field()
   @Length(3, 30)
   displayName: string;
+}
+
+@ObjectType()
+export class UserAuthResponse {
+  @Field((type) => User)
+  user: Partial<User>;
+
+  @Field((type) => String)
+  token: string;
 }
