@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config();
 import { ApolloServer } from "apollo-server-express";
 import { createConnection } from "typeorm";
@@ -8,9 +8,11 @@ import { buildSchema } from "type-graphql";
 import UserResolver from "./resolvers/UserResolver";
 import { User } from "./models/User";
 import * as jwt from "express-jwt";
+import { Board } from "./models/Board";
+import BoardResolver from "./resolvers/BoardResolver";
 
 const IS_TEST = process.env.NODE_ENV === "test";
-const DB = IS_TEST ? process.env.TEST_DB_NAME : process.env.DB_NAME
+const DB = IS_TEST ? process.env.TEST_DB_NAME : process.env.DB_NAME;
 
 async function main() {
   const options: any = {
@@ -22,14 +24,14 @@ async function main() {
     synchronize: true,
     logging: false,
     database: DB,
-    entities: [User],
+    entities: [User, Board],
     name: IS_TEST ? "test" : "default",
   };
 
   await createConnection(options);
 
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, BoardResolver],
     emitSchemaFile: true,
   });
 
@@ -45,7 +47,7 @@ async function main() {
 
   app.use(
     "/graphql",
-    jwt({ secret: "some-secret-secret", algorithms: ["HS256"] })
+    jwt({ secret: "some-secret-secret", algorithms: ["HS256"], credentialsRequired: false })
   );
 
   server.applyMiddleware({ app });
