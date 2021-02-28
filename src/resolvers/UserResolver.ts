@@ -1,9 +1,9 @@
 import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
-import { User, UserInput, UserAuthResponse } from '../models/User';
+import { User, UserInput, UserAuthResponse } from "../models/User";
 import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { ApolloError, UserInputError } from "apollo-server-express";
-import { Context } from '../types/index';
+import { Context } from "../types/index";
 
 @Resolver((of) => User)
 export default class UserResolver {
@@ -40,7 +40,10 @@ export default class UserResolver {
         role: newUser.role,
       };
 
-      const genToken = sign(authUser, "app_secret", { expiresIn: "1y" });
+      const genToken = sign(authUser, "app_secret", {
+        expiresIn: "1y",
+        algorithm: "HS256",
+      });
 
       return {
         user: authUser,
@@ -86,7 +89,10 @@ export default class UserResolver {
         role: findUser.role,
       };
 
-      const genToken = sign(authUser, "app_secret", { expiresIn: "1y" });
+      const genToken = sign(authUser, "app_secret", {
+        expiresIn: "1y",
+        algorithm: "HS256",
+      });
 
       return {
         user: authUser,

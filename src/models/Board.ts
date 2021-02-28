@@ -1,5 +1,5 @@
 import { Length } from "class-validator";
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -17,17 +17,14 @@ export class Board extends BaseEntity {
 
   @Field()
   @Column("varchar", { unique: true })
-  @Length(1, 50)
   name: string;
 
   @Field()
   @Column("varchar")
-  @Length(1, 200)
   description: string;
 
   @Field()
   @Column("varchar", { unique: true })
-  @Length(1, 50)
   topic: string;
 
   @Field()
@@ -35,3 +32,17 @@ export class Board extends BaseEntity {
   created: Date;
 }
 
+@InputType()
+export class BoardInput implements Partial<Board> {
+  @Field((type) => String)
+  @Length(1, 50)
+  name: string;
+
+  @Field((type) => String)
+  @Length(1, 200)
+  description: string;
+
+  @Field((type) => String)
+  @Length(1, 50)
+  topic: string;
+}

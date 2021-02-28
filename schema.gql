@@ -11,12 +11,19 @@ type Board {
   topic: String!
 }
 
+input BoardInput {
+  description: String!
+  name: String!
+  topic: String!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
 
 type Mutation {
+  createBoard(boardData: BoardInput!): Board!
   signInUser(email: String!, password: String!): UserAuthResponse!
   signUpUser(userData: UserInput!): UserAuthResponse!
 }
@@ -24,6 +31,7 @@ type Mutation {
 type Query {
   getAllBoards: [Board!]!
   getAllUsers: [User!]!
+  getBoard(boardId: String!): Board!
   getCurrentUser: User!
   getUser(uid: String!): User!
 }

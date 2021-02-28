@@ -47,7 +47,7 @@ async function main() {
 
   app.use(
     "/graphql",
-    jwt({ secret: "some-secret-secret", algorithms: ["HS256"], credentialsRequired: false })
+    jwt({ secret: "app_secret", algorithms: ["HS256"], credentialsRequired: false })
   );
 
   server.applyMiddleware({ app });
